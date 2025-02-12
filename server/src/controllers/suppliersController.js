@@ -39,7 +39,7 @@ const createSupplier = async (req, res) => {
              VALUES ($1, $2, $3, $4, $5) RETURNING *`,
              [name, contact_person, phone, email, address]
         );
-        res.status(201).json(res.result[0]);
+        res.status(201).json(result.rows[0]);
     } catch (error) {
         console.error(error);
         res.status(500).json({message:'Server error'});

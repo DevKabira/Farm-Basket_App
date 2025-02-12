@@ -4,7 +4,7 @@ const pool = require('../db/db');
 const getAllExpenses = async (req, res) => {
     try {
         const result = await pool.query(
-            'SELECT * FROM expenses ORDER BY date DESC'
+            'SELECT * FROM expenses ORDER BY created_at DESC'
         );
         res.json(result.rows);
     } catch (error) {
