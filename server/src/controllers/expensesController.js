@@ -8,8 +8,7 @@ const getAllExpenses = async (req, res) => {
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 };
 
@@ -26,8 +25,7 @@ const getExpenseById = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});       
+        next(error);       
     }
 };
 
@@ -42,8 +40,7 @@ const createExpense = async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 }
 
@@ -63,8 +60,7 @@ const updateExpense = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 };
 
@@ -78,8 +74,7 @@ const deleteExpense = async (req, res) => {
         );
         res.json({message:'Expense deleted successfully'});
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 };
 

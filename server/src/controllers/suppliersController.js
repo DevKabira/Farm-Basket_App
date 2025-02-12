@@ -8,8 +8,7 @@ const getAllSuppliers = async (req, res) => {
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 };
 
@@ -25,8 +24,7 @@ const getSupplierById = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 }
 
@@ -41,8 +39,7 @@ const createSupplier = async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 };
 
@@ -62,8 +59,7 @@ const updateSupplier = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
 }
 
@@ -79,8 +75,7 @@ const deleteSupplier = async (req, res) => {
         }
         res.json({message: 'Supplier deleted successfully'});
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+        next(error);
     }
     
 }

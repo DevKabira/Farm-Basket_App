@@ -6,8 +6,7 @@ const getAllCustomers = async (req, res) => {
         const result = await pool.query('SELECT * FROM customers ORDER BY created_at DESC');
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -23,8 +22,7 @@ const getCustomerById = async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -38,8 +36,7 @@ const createNewCustomer = async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -60,8 +57,7 @@ const updateCustomer = async (req, res) => {
 
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -74,8 +70,7 @@ const deleteCustomer = async (req, res) => {
         );
         res.json({ message: 'Customer deleted succesfully'});
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 

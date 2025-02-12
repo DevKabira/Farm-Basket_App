@@ -8,8 +8,7 @@ const getAllPurchases = async (req, res) => {
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -26,8 +25,7 @@ const getPurchaseById = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
 
@@ -42,8 +40,7 @@ const createPurchase = async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });       
+        next(error);       
     }
 };
 
@@ -63,8 +60,7 @@ const updatePurchase = async (req, res) => {
         }
         res.json(result.rows[0])
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
 
@@ -78,8 +74,7 @@ const deletePurchase = async (req, res) => {
         );
         res.json({ messsage: 'Purchase deleted successfully' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
 

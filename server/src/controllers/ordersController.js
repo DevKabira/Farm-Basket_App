@@ -8,8 +8,7 @@ const getAllOrders = async (req, res) => {
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
 
@@ -25,8 +24,7 @@ const getOrderById = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
 
@@ -41,8 +39,7 @@ const createNewOrder = async (req, res) => {
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -62,8 +59,7 @@ const updateOrder = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -77,8 +73,7 @@ const deleteOrder = async (req, res) => {
         );
         res.json({ message: 'Order deleted succesfully' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 }
 

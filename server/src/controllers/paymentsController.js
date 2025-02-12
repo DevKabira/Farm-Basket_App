@@ -28,8 +28,7 @@ const getPaymentById = async (req, res) => {
         }
         res.json(result.rows[0]);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+       next(error);
     }
 };
 
@@ -71,8 +70,7 @@ const createPayment = async (req, res) => {
         res.status(201).json({ message: 'Payment recorded successfully', payment: newPayment });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+       next(error);
     }
 };
 
@@ -128,8 +126,7 @@ const updatePayment = async (req, res) => {
         res.json({ message: 'Payment updated successfully', payment: updatedPayment });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
+        next(error);
     }
 };
 
@@ -166,8 +163,7 @@ const deletePayment = async (req, res) => {
         res.json({ message: 'Payment deleted successfully'})
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'Server error'});
+       next(error);
     }
 }
 
