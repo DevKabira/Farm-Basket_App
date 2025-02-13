@@ -7,11 +7,12 @@ const {
     updateSupplier,
     deleteSupplier
 } = require('../controllers/suppliersController');
+const auth = require('../middleware/auth');
 
-router.get('/', getAllSuppliers);
-router.get('/:id', getSupplierById);
-router.post('/', createSupplier);
-router.put('/:id', updateSupplier);
-router.delete('/:id', deleteSupplier);
+router.get('/', auth, getAllSuppliers);
+router.get('/:id', auth, getSupplierById);
+router.post('/', auth, createSupplier);
+router.put('/:id', auth, updateSupplier);
+router.delete('/:id', auth, deleteSupplier);
 
 module.exports = router;

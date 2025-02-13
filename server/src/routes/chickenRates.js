@@ -7,11 +7,12 @@ const {
    updateChickenRate,
    deleteChicketRate
 } = require('../controllers/chickenRatesController');
+const auth = require('../middleware/auth');
 
-router.get('/', getAllChickenRates);
-router.get('/:id', getChickenById);
-router.post('/', createChickenRate);
-router.put('/:id', updateChickenRate);
-router.delete('/:id', deleteChicketRate);
+router.get('/', auth, getAllChickenRates);
+router.get('/:id', auth, getChickenById);
+router.post('/', auth, createChickenRate);
+router.put('/:id', auth, updateChickenRate);
+router.delete('/:id', auth, deleteChicketRate);
 
 module.exports = router;

@@ -7,11 +7,12 @@ const {
     updateCustomer,
     deleteCustomer
 } = require('../controllers/customersController');
+const auth = require('../middleware/auth');
 
-router.get('/', getAllCustomers);
-router.get('/:id', getCustomerById);
-router.post('/', createNewCustomer);
-router.put('/:id', updateCustomer);
-router.delete('/:id', deleteCustomer);
+router.get('/', auth, getAllCustomers);
+router.get('/:id', auth, getCustomerById);
+router.post('/', auth, createNewCustomer);
+router.put('/:id', auth, updateCustomer);
+router.delete('/:id', auth, deleteCustomer);
 
 module.exports = router;

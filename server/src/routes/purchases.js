@@ -7,11 +7,12 @@ const {
     updatePurchase,
     deletePurchase
 } = require('../controllers/purchasesController');
+const auth = require('../middleware/auth');
 
-router.get('/', getAllPurchases);
-router.get('/:id', getPurchaseById);
-router.post('/', createPurchase);
-router.put('/:id', updatePurchase);
-router.delete('/:id', deletePurchase);
+router.get('/', auth, getAllPurchases);
+router.get('/:id', auth, getPurchaseById);
+router.post('/', auth, createPurchase);
+router.put('/:id', auth, updatePurchase);
+router.delete('/:id', auth, deletePurchase);
 
 module.exports = router;
