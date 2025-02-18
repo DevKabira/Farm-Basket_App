@@ -1,7 +1,7 @@
 const pool = require('../db/db');
 
 // Get all customers
-const getAllCustomers = async (req, res) => {
+const getAllCustomers = async (req, res, next) => {
     try {
         const result = await pool.query('SELECT * FROM customers ORDER BY created_at DESC');
         res.json(result.rows);
@@ -11,7 +11,7 @@ const getAllCustomers = async (req, res) => {
 };
 
 // Get a single customers by id
-const getCustomerById = async (req, res) => {
+const getCustomerById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query('SELECT * FROM customers WHERE id = $1', [id]);
@@ -27,7 +27,7 @@ const getCustomerById = async (req, res) => {
 };
 
 // Create a new customer
-const createNewCustomer = async (req, res) => {
+const createNewCustomer = async (req, res, next) => {
     try{
         const { name, phone, email, address } = req.body;
         const result = await pool.query(
@@ -41,7 +41,7 @@ const createNewCustomer = async (req, res) => {
 };
 
 // Update a customr
-const updateCustomer = async (req, res) => {
+const updateCustomer = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { name, phone, email, address } = req.body;
@@ -62,12 +62,13 @@ const updateCustomer = async (req, res) => {
 };
 
 // Delete a customer
-const deleteCustomer = async (req, res) => {
+const deleteCustomer = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
             'DELETE FROM customers WHERE id = $1', [id]
         );
+        if(result.rows.length === 0) return res.status(404).json({ message:'Customer not found' });
         res.json({ message: 'Customer deleted succesfully'});
     } catch (error) {
         next(error);

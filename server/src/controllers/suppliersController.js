@@ -1,7 +1,7 @@
 const pool = require('../db/db');
 
 // Get all suppliers
-const getAllSuppliers = async (req, res) => {
+const getAllSuppliers = async (req, res, next) => {
     try {
         const result = await pool.query(
             'SELECT * FROM suppliers ORDER BY created_at DESC' 
@@ -13,7 +13,7 @@ const getAllSuppliers = async (req, res) => {
 };
 
 // Get a single supplier by id
-const getSupplierById = async (req, res) => {
+const getSupplierById = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(
@@ -29,7 +29,7 @@ const getSupplierById = async (req, res) => {
 }
 
 // create a new supplier
-const createSupplier = async (req, res) => {
+const createSupplier = async (req, res, next) => {
     try {
         const { name, contact_person, phone, email, address } = req.body;
         const result = await pool.query(
@@ -44,7 +44,7 @@ const createSupplier = async (req, res) => {
 };
 
 // update supplier
-const updateSupplier = async (req, res) => {
+const updateSupplier = async (req, res, next) => {
     try {
         const {id} = req.params;
         const { name, contact_person, phone, email, address } = req.body;
@@ -64,7 +64,7 @@ const updateSupplier = async (req, res) => {
 }
 
 // delete supplier
-const deleteSupplier = async (req, res) => {
+const deleteSupplier = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(

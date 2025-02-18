@@ -1,7 +1,7 @@
 const pool = require('../db/db');
 
 // Get all expenses
-const getAllChickenRates = async (req, res) => {
+const getAllChickenRates = async (req, res, next) => {
     try {
         const result = await pool.query(
             'SELECT * FROM chicken_rates ORDER BY date DESC'
@@ -13,7 +13,7 @@ const getAllChickenRates = async (req, res) => {
 };
 
 // Get a single expense by id
-const getChickenById = async (req, res) => {
+const getChickenById = async (req, res, next) => {
     try {
         const {id} = req.params
         const result = await pool.query(
@@ -30,7 +30,7 @@ const getChickenById = async (req, res) => {
 };
 
 // Create a new expense
-const createChickenRate = async (req, res) => {
+const createChickenRate = async (req, res, next) => {
     try {
         const { rate, quantity_unit } = req.body;
         const result = await pool.query(
@@ -45,7 +45,7 @@ const createChickenRate = async (req, res) => {
 }
 
 // Update expense
-const updateChickenRate = async (req, res) => {
+const updateChickenRate = async (req, res, next) => {
     try {
         const {id} = req.params;
         const {rate, quantity_unit} = req.body;
@@ -65,13 +65,14 @@ const updateChickenRate = async (req, res) => {
 };
 
 // Delete expense
-const deleteChicketRate = async (req, res) => {
+const deleteChicketRate = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(
             'DELETE FROM chicken_rates WHERE id = $1',
             [id]
         );
+        if(result.rows.length === 0) return res.status(404).json({ message:'Chicken rate not found' });
         res.json({message:'Chicken rates deleted successfully'});
     } catch (error) {
         next(error);

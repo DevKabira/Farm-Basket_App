@@ -1,7 +1,7 @@
 const pool = require('../db/db');
 
 // Get all expenses
-const getAllExpenses = async (req, res) => {
+const getAllExpenses = async (req, res, next) => {
     try {
         const result = await pool.query(
             'SELECT * FROM expenses ORDER BY created_at DESC'
@@ -13,7 +13,7 @@ const getAllExpenses = async (req, res) => {
 };
 
 // Get a single expense by id
-const getExpenseById = async (req, res) => {
+const getExpenseById = async (req, res, next) => {
     try {
         const {id} = req.params
         const result = await pool.query(
@@ -30,7 +30,7 @@ const getExpenseById = async (req, res) => {
 };
 
 // Create a new expense
-const createExpense = async (req, res) => {
+const createExpense = async (req, res, next) => {
     try {
         const { order_id, description, amount, category } = req.body;
         const result = await pool.query(
@@ -45,7 +45,7 @@ const createExpense = async (req, res) => {
 }
 
 // Update expense
-const updateExpense = async (req, res) => {
+const updateExpense = async (req, res, next) => {
     try {
         const {id} = req.params;
         const {order_id, description, amount, category} = req.body;
@@ -65,13 +65,14 @@ const updateExpense = async (req, res) => {
 };
 
 // Delete expense
-const deleteExpense = async (req, res) => {
+const deleteExpense = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(
             'DELETE FROM expenses WHERE id = $1',
             [id]
         );
+        if(result.rows.length === 0) return res.status(404).json({ message:'Expense not found' });
         res.json({message:'Expense deleted successfully'});
     } catch (error) {
         next(error);

@@ -1,7 +1,7 @@
 const pool = require('../db/db');
 
 // Get all users
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, next) => {
     try {
         const result = await pool.query(
             'SELECT * FROM users ORDER BY created_at DESC'
@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
 };
 
 // Get a single user by id
-const getUserbyId = async (req, res) => {
+const getUserbyId = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(
@@ -29,7 +29,7 @@ const getUserbyId = async (req, res) => {
 };
 
 // create a new user
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
     try {
         const {email, password} = req.body;
         const result = await pool.query(
@@ -44,7 +44,7 @@ const createUser = async (req, res) => {
 };
 
 // update user
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
     try {
         const {id} = req.params;
         const {email, password} = req.body;
@@ -64,7 +64,7 @@ const updateUser = async (req, res) => {
 };
 
 // delete user
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(

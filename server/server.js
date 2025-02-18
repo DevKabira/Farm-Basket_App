@@ -2,6 +2,7 @@ require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const cors = require('cors');
 const authRoutes = require('./src/routes/auth');
+const errorHandler = require('./src/middleware/errorMiddleware');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -35,10 +36,9 @@ app.use('/api/expenses', ExpenseRoutes);
 const ChickenRateRoutes = require('./src/routes/chickenRates');
 app.use('/api/chicken-rates/', ChickenRateRoutes);
 
-// Test route
-app.get('/', (req, res) => {
-    res.send('Farm Basket API is running...');
-});
+
+
+app.use(errorHandler);  // Error Handler Middleware
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

@@ -1,7 +1,7 @@
 const pool = require('../db/db');
 
 // Get all purchases
-const getAllPurchases = async (req, res) => {
+const getAllPurchases = async (req, res, next) => {
     try {
         const result = await pool.query(
             'SELECT * FROM purchases ORDER BY created_at DESC'
@@ -13,7 +13,7 @@ const getAllPurchases = async (req, res) => {
 };
 
 // Get a single purchase by id
-const getPurchaseById = async (req, res) => {
+const getPurchaseById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
@@ -30,7 +30,7 @@ const getPurchaseById = async (req, res) => {
 }
 
 // Create a new purchase
-const createPurchase = async (req, res) => {
+const createPurchase = async (req, res, next) => {
     try {
         const { order_id, supplier_id, quantity, rate, total_amount, status } = req.body;
         const result = await pool.query(
@@ -45,7 +45,7 @@ const createPurchase = async (req, res) => {
 };
 
 // Update purchase
-const updatePurchase = async (req, res) => {
+const updatePurchase = async (req, res, next) => {
     try {
         const {id} = req.params;
         const {order_id, supplier_id, quantity, rate, total_amount, status } = req.body;
@@ -65,13 +65,14 @@ const updatePurchase = async (req, res) => {
 }
 
 // Delete Purchase
-const deletePurchase = async (req, res) => {
+const deletePurchase = async (req, res, next) => {
     try {
         const {id} = req.params;
         const result = await pool.query(
             'DELETE FROM purchases WHERE id = $1',
             [id]
         );
+        if(result.rows.length === 0) return res.status(404).json({ message:'Purchase not found' });
         res.json({ messsage: 'Purchase deleted successfully' });
     } catch (error) {
         next(error);

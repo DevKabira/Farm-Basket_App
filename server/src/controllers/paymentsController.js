@@ -2,21 +2,20 @@ const pool = require('../db/db');
 const { runTransaction } = require('../utils/TransactionHelper');
 
 // Get all payments
-const getAllPayments = async (req, res) => {
+const getAllPayments = async (req, res, next) => {
     try {
         const result = await pool.query(
             'SELECT * FROM payments ORDER BY payment_date DESC'
         );
         res.json(result.rows);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({message: 'Server error'});
+        next(error);
     }
     
 };
 
 // Get a single payment by id
-const getPaymentById = async (req, res) => {
+const getPaymentById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const result = await pool.query(
@@ -33,7 +32,7 @@ const getPaymentById = async (req, res) => {
 };
 
 // Create a new payment
-const createPayment = async (req, res) => {
+const createPayment = async (req, res, next) => {
     try {
         const {order_id, amount_paid, payment_type} = req.body;
         
@@ -75,7 +74,7 @@ const createPayment = async (req, res) => {
 };
 
 // Update payment
-const updatePayment = async (req, res) => {
+const updatePayment = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { amount_paid, payment_type } = req.body;
@@ -85,7 +84,7 @@ const updatePayment = async (req, res) => {
             const oldpayment = await client.query(
                 'SELECT order_id, amount_paid FROM payments WHERE id = $1', [id]
             );
-            if (oldpayment.rows.length === 0) { throw new Error('Payment not found'); }
+            if (oldpayment.rows.length === 0) return res.status(404).json({ message:'Payment not found' });
 
             const { order_id, amount_paid: oldAmountPaid } = oldpayment.rows[0];
 
@@ -94,7 +93,7 @@ const updatePayment = async (req, res) => {
                 'SELECT COALESCE(outstanding_amount, 0) AS outstanding_amount FROM orders WHERE id = $1 FOR UPDATE', 
                 [order_id]
             );
-            if (order.rows.length === 0) { throw new Error('Order not found'); }
+            if (order.rows.length === 0) return res.status(404).json({ message:'Payment not found' });
 
             let currentOutstanding = Number(order.rows[0].outstanding_amount); // Ensure it's a number
             let oldAmountPaidNum = Number(oldAmountPaid); // Ensure oldAmountPaid is also a number
@@ -102,7 +101,7 @@ const updatePayment = async (req, res) => {
 
             // Calculate new outstanding amount
             const newOutstanding = currentOutstanding + oldAmountPaidNum - amountPaidNum;
-            if (newOutstanding < 0) { throw new Error('Updated payment amount exceeds outstanding balance'); }
+            if (newOutstanding < 0) return res.status(400).json({ message:'Updated payment amount exceeds outstanding balance' });
 
             // Update payment
             const payment = await client.query(
@@ -132,7 +131,7 @@ const updatePayment = async (req, res) => {
 
 
 // Delete payment
-const deletePayment = async (req, res) => {
+const deletePayment = async (req, res, next) => {
     try {
         const {id} = req.params;
         
@@ -142,7 +141,7 @@ const deletePayment = async (req, res) => {
                 'SELECT order_id, amount_paid FROM payments WHERE id = $1', [id]
             );
 
-            if(payment.rows.length === 0) { throw new Error('Payment not found'); }
+            if(payment.rows.length === 0) return res.status(404).json({ message:'Payment not found' });
 
             const { order_id, amount_paid } = payment.rows[0];
 
